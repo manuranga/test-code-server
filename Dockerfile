@@ -18,7 +18,7 @@ COPY ${BALLERINA_DIST} /root/
 # Create folders, install dependencies, unzip distribution, create users, & set permissions.
 RUN mkdir -p /ballerina/files \
     && groupadd troupe \
-    && useradd -ms /bin/bash -g troupe ballerina \
+    && useradd -ms /bin/bash -g troupe -u 10001 ballerina \
     && apt-get update \
     && apt-get upgrade -y \
     # Dependencies from Dockerfile2 + Dockerfile1 (code-server)
@@ -109,8 +109,8 @@ VOLUME /home/ballerina
 # Expose code-server port (from Dockerfile1)
 EXPOSE 8443
 
-# User from Dockerfile2
-USER ballerina
+# Use numeric UID instead of username for security
+USER 10001
 
 # Define a CMD or ENTRYPOINT as needed, e.g., to start code-server
 CMD ["/app/code-server/bin/code-server", "--host", "0.0.0.0"]
